@@ -1,7 +1,7 @@
 # from django.shortcuts import render
-# from django.http import HttpResponse, response
+from django.http import HttpResponse, response
 # from django.template import loader
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.http  import Http404
 
 from .models import Question
@@ -26,16 +26,20 @@ def index(request):
     
 
 def detail(request, question_id):
-    # return HttpResponse("You're looking at question %s." % question_id)
-    try:
-        question = Question.objects.get(pk=question_id)
-    except Question.DoesNotExist:
-        raise Http404("Question does not exist")
+    question = get_object_or_404(Question, pk=question_id)
     return render(request, 'polls/detail.html', {'question': question})
+    # try:
+    #     question = Question.objects.get(pk=question_id)
+    # except Question.DoesNotExist:
+    #     raise Http404("Question does not exist")
+    # return render(request, 'polls/detail.html', {'question': question})
 
 def results(request, question_id):
-    response = "You are looking at the results of question %s"
+     
+    response = "You're looking at the results of question %s."
     return HttpResponse(response % question_id)
+     # result = get_object_or_404(Choice, pk=question_id)
+    # return render(request, 'polls/results.html', {'result':result})
 
 def vote(request, question_id):
     return HttpResponse("You are voting on question %s." % question_id)
